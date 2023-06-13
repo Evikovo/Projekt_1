@@ -1,0 +1,108 @@
+"""
+projekt_1.py: první projekt do Engeto Online Python Akademie
+
+author: Eva Hercíková
+email: eva.hercikova@gmail.com
+discord: eva.hercikova#1247
+"""
+# Texty
+TEXTY = ['''
+Situated about 10 miles west of Kemmerer,
+Fossil Butte is a ruggedly impressive
+topographic feature that rises sharply
+some 1000 feet above Twin Creek Valley
+to an elevation of more than 7500 feet
+above sea level. The butte is located just
+north of US 30N and the Union Pacific Railroad,
+which traverse the valley. ''',
+         '''At the base of Fossil Butte are the bright
+red, purple, yellow and gray beds of the Wasatch
+Formation. Eroded portions of these horizontal
+beds slope gradually upward from the valley floor
+and steepen abruptly. Overlying them and extending
+to the top of the butte are the much steeper
+buff-to-white beds of the Green River Formation,
+which are about 300 feet thick.''',
+         '''The monument contains 8198 acres and protects
+a portion of the largest deposit of freshwater fish
+fossils in the world. The richest fossil fish deposits
+are found in multiple limestone layers, which lie some
+100 feet below the top of the butte. The fossils
+represent several varieties of perch, as well as
+other freshwater genera and herring similar to those
+in modern oceans. Other fish such as paddlefish,
+garpike and stingray are also present.'''
+         ]
+# ověření registrovaných uživatelů a možnost volby textu
+
+uzivatel = {"bob": "123", "ann": "pass123", "mike": "password123", "liz": "pass123"}
+jmeno = input("Zadej svoje jméno: ")
+heslo = input("Zadej svoje heslo: ")
+
+if uzivatel[jmeno] == heslo:
+    print("-" * 40)
+    print("Vítej", jmeno)
+    print("Máme zde tři texty, které můžeš analyzovat")
+    TEXTS = input("Zadej číslo od 1 do 3 pro zvolení textu: ")
+    if TEXTS.isdigit():
+        if int(TEXTS) > 3 or int(TEXTS) < 1:
+            print("Zvolil jsi špatné číslo")
+        else:
+            print("Dobrá volba!")
+            print("-" * 40)
+    else:
+        print("Nezvolil jsi číslo")
+else:
+    print(jmeno, "bohužel nejsi registrovaný")
+
+# Analýza textu
+slova = []
+cisla = []
+mala = []
+velka = []
+velke_a_mala = []
+mix = []
+soucet = 0
+
+vyber = TEXTY[int(TEXTS) - 1].replace("\n", " ").replace(",", " ").replace(".", " ").split()
+
+for slovo in vyber:
+    if slovo.isdigit():
+        cisla.append(slovo)
+        soucet += int(slovo)
+    elif slovo.isalpha():
+        slova.append(slovo)
+        if slovo.islower():
+            mala.append(slovo)
+        elif slovo.istitle():
+            velke_a_mala.append(slovo)
+        elif slovo.isupper():
+            velka.append(slovo)
+        else:
+            continue
+    else:
+        mix.append(slovo)
+
+print("Ve vybraném textu je", len(slova) + len(cisla) + len(mix), "slov.")
+print("Ve vybraném textu je", len(velke_a_mala), "slov s prvním velkým písmenem.")
+print("Ve vybraném textu je", len(velka), "slov psaných velkými písmeny.")
+print("Ve vybraném textu je", len(mala), "slov psaných malými písmeny.")
+print("Ve vybraném textu je", len(cisla), "čísel.")
+print("Ve vybraném textu je", len(mix), "slov kombinovaných s čísly.")
+print("Součet všech čísel je", soucet)
+print("-" * 40)
+
+# délky slov
+delky = {}
+for slovo in vyber:
+    delky[len(slovo)] = 0
+for slovo in vyber:
+    delky[len(slovo)] += 1
+
+# formáty
+print(("DÉLKA").rjust(6), ("VÝSKYT").center(17), "POČET", sep="|")
+print("-" * 40)
+for vyskyt in sorted(delky):
+    fmt1 = str(vyskyt).rjust(6)
+    fmt2 = (delky[vyskyt] * "*").ljust(17)
+    print(fmt1, fmt2, delky[vyskyt], sep="|")
